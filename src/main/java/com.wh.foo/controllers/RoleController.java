@@ -1,16 +1,21 @@
 package com.wh.foo.controllers;
 
+import com.wh.foo.core.Servlets;
 import com.wh.foo.models.Role;
 import com.wh.foo.services.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+import java.util.Map;
 
 /**
  * @Description: 角色Controller
@@ -27,16 +32,21 @@ public class RoleController extends BaseController{
     private RoleService service;
 
     /**
-     * 角色列表
+     * 分页查询角色信息
      *
-     * @Param [model]
+     * @Param [pageNumber, pageSize, request, model]
      * @Author WangHong
-     * @Date 16:14 2020/4/8
+     * @Date 10:54 2020/4/10
      * @return java.lang.String
      **/
     @GetMapping("list")
-    public String list(Model model){
-        model.addAttribute("list", service.findAll());
+    public String list(@RequestParam(value = "page", defaultValue = "0") int pageNumber,
+                       @RequestParam(value = "size", defaultValue = "1") int pageSize, ServletRequest request,
+                       Model model){
+        Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+        Page<Role> page = service.findPage(searchParams, pageNumber, pageSize);
+        model.addAttribute("page", page);
+        model.addAttribute("searchParams", searchParams);
         return "sys/role/list";
     }
 

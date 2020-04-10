@@ -1,6 +1,7 @@
 package com.wh.foo.models;
 
 import com.google.common.collect.Lists;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,6 +19,8 @@ public class Role extends BaseEntity{
     private int state = 0;
     /** 角色名称 */
     private String name;
+    /** 描述 */
+    private String remark;
     /** 对应用户 */
     private List<User> users = Lists.newArrayList();
     /** 对应资源 */
@@ -52,12 +55,21 @@ public class Role extends BaseEntity{
     @JoinTable(name = "foo_role_permissions",
             joinColumns = {@JoinColumn(name="role_id",referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name="permissions_id",referencedColumnName="id")})
+    @Where(clause = "state=0")
     public List<Permission> getPermissions() {
         return permissions;
     }
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Transient

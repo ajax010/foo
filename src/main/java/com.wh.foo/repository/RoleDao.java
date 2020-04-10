@@ -1,7 +1,9 @@
 package com.wh.foo.repository;
 
 import com.wh.foo.models.Role;
+import com.wh.foo.repository.custom.RoleDaoCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
  * @Auther: WangHong
  * @Date: 2020/4/8 16:15
  */
-public interface RoleDao extends JpaRepository<Role, Long> {
+public interface RoleDao extends JpaRepository<Role, Long>, JpaSpecificationExecutor<Role>, RoleDaoCustom {
 
     /**
      * 根据ID查询角色

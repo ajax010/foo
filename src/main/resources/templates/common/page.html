@@ -17,8 +17,8 @@
                         || ((page.number - count) > -3 && (page.number - count) < 3)
                         || ((page.totalPages - page.number) < 3 && (page.totalPages - count) < 5)}"
                         >1</button>
-                <button type="button" value="next_page" class="btn btn-outline-secondary btn-sm" th:disabled="${(page.number + 1) == totalPages}">下一页</button>
-                <button type="button" value="end" class="btn btn-outline-secondary btn-sm" th:disabled="${(page.number + 1) == totalPages}">尾页</button>
+                <button type="button" value="next_page" class="btn btn-outline-secondary btn-sm" th:disabled="${page.totalPages <= 1 || (page.number + 1) == page.totalPages}">下一页</button>
+                <button type="button" value="end" class="btn btn-outline-secondary btn-sm" th:disabled="${page.totalPages <= 1 || (page.number + 1) == page.totalPages}">尾页</button>
             </div>
         </div>
     </div>

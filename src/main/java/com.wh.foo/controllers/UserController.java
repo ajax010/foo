@@ -42,7 +42,7 @@ public class UserController extends BaseController{
      **/
     @GetMapping("list")
     public String list(@RequestParam(value = "page", defaultValue = "0") int pageNumber,
-                       @RequestParam(value = "size", defaultValue = "1") int pageSize, ServletRequest request,
+                       @RequestParam(value = "size", defaultValue = "20") int pageSize, ServletRequest request,
                        Model model){
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Page<Map<String, Object>> page = service.getPage(searchParams, pageNumber, pageSize);
