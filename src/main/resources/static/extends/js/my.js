@@ -36,7 +36,22 @@ $(function(){
 
         $('input[name="page"]').val(val);
         $('#listForm').submit();
-    })
+    });
+//
+//    let pageNumber = $('#pageNumber').text();
+//    let totalPages = $('#totalPages').text();
+//    if('undefined' != pageNumber && '' != pageNumber
+//        && 'undefined' != totalPages && '' != totalPages){
+//        $('#_page_module .btn-page').each(function(){
+//            if(pageNumber <= 3){
+//
+//            }
+//            let index = $('#_page_module .btn-page').index(this);
+//            if(index < 5){
+//                $(this).show();
+//            }
+//        })
+//    }
 });
 
 // 重置搜索条件
