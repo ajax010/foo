@@ -1,0 +1,20 @@
+.required{
+    color: red;
+}
+
+#_page_module .btn-page{
+    margin-left: 3px;
+}
+
+#_page_module ._active{
+    background-color: #6c757d;
+    color: #fff;
+}
+
+#listForm th, td{
+    vertical-align: baseline;
+}
+
+#listForm td{
+    padding: 0 5px;
+}

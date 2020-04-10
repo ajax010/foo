@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout_css :: common_header(~{::title},~{::link})">
+    <meta charset="UTF-8">
+    <title>管理平台</title>
+</head>
+<body>
+<aside th:replace="common/menu :: menu"></aside>
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <div th:replace="common/header :: header"></div>
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>角色管理</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li><a href="#">账户用户</a></li>
+                        <li class="active">角色管理</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="fa-hover col-lg-3 col-md-6">
+                                <a th:href="@{/role/add}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fa fa-plus-square"></i> 新增角色</a>
+                            </div>
+                            <form id="inputForm"></form>
+                        </div>
+                        <div class="card-body">
+                            <table id="dataTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">#</th>
+                                        <th width="30%">角色名称</th>
+                                        <th width="30%">权限</th>
+                                        <th width="25%">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="e,roleStat : ${list}">
+                                        <td th:text="${roleStat.index + 1}">序号</td>
+                                        <td th:text="${e.name}">角色名称</td>
+                                        <td th:text="${e.permissionNameStr}">权限</td>
+                                        <td>
+                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/role/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
+                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div> <!-- .content -->
+</div><!-- /#right-panel -->
+<!-- Right Panel -->
+<!--使用公有js-->
+<div th:replace="common/layout_js::common_js(~{::script})">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            let alertCode = /*[[${message?.alertCode}]]*/ 'Sebastian';
+            let message = /*[[${message?.message}]]*/ 'Sebastian';
+            $.message(alertCode, message);
+        /*]]>*/
+
+        function del(id){
+            if('' == id){
+                return;
+            }
+
+            layer.confirm('确定删除？', function(){
+                $('#inputForm').attr('action', '/role/del');
+                $('#inputForm').attr('method', 'post');
+                $('#inputForm').append('<input name="id" value="'+ id + '" type="hidden"/>');
+                $('#inputForm').submit();
+                layer.closeAll();
+            }, function(){
+                layer.closeAll();
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

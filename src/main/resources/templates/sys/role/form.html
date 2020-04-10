@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout_css :: common_header(~{::title},~{::link})">
+    <meta charset="UTF-8">
+    <title>管理平台</title>
+</head>
+<body>
+<aside th:replace="common/menu :: menu"></aside>
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <div th:replace="common/header :: header"></div>
+    <div class="breadcrumbs">
+        <div class="col-sm-4">
+            <div class="page-header float-left">
+                <div class="page-title">
+                    <h1>角色管理</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="page-header float-right">
+                <div class="page-title">
+                    <ol class="breadcrumb text-right">
+                        <li><a href="#">账户用户</a></li>
+                        <li><a th:href="@{/user/list}">角色管理</a></li>
+                        <li class="active" th:text="${entity?.id} ? '编辑' : '新增'">新增</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content mt-3">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong>用户信息</strong>
+                </div>
+                <form id="inputForm" th:action="@{/role/save}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    <input id="id" name="id" type="hidden" th:value="${entity.id}"/>
+                    <div class="card-body card-block">
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="name" class=" form-control-label">名称</label><span th:if="${entity.id} eq null" class="required">*</span></div>
+                            <div class="col-12 col-md-10">
+                                <input th:if="${entity.id} eq null" type="text" id="name" name="name" placeholder="名称" class="form-control" th:value="${entity.name}" />
+                                <span th:if="${entity.id} ne null" th:text="${entity.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        <div class="row form-group">
+                            <div class="col col-md-2">
+                                <label for="name" class=" form-control-label">权限组</label><span class="required">*</span>
+                            </div>
+                            <div class="col-12 col-md-10">
+                                <span th:each="e : ${permissions}" th:text="${e.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> 提交
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='/user/list'">
+                            <i class="fa fa-share"></i> 返回
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> <!-- .content -->
+</div><!-- /#right-panel -->
+<!-- Right Panel -->
+<!--使用公有js-->
+<div th:replace="common/layout_js::common_js(~{::script})">
+    <script th:src="@{/extends/js/validate/user-form.js}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            FormValidation.init();
+        })
+    </script>
+</div>
+</body>
+</html>

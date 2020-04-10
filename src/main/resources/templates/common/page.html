@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div id="_page_module" th:fragment="page(page)">
+        <div class="row">
+            <div class="col-md-8">
+                总计：<span id="totalElements" th:text="${page.totalElements}"/>&nbsp;条；
+                <span id="pageNumber" th:text="${page.number + 1}"/>/<span id="totalPages" th:text="${page.totalPages}"/>页。
+                <input id="pageSize" th:value="${page.size}" type="hidden"/>
+            </div>
+            <div class="col-md-4" th:page_size="${page.size}" th:page_number="${page.number}">
+                <button type="button" value="home_page" class="btn btn-outline-secondary btn-sm" th:disabled="${page.number == 0}">首页</button>
+                <button type="button" value="previous_page" class="btn btn-outline-secondary btn-sm" th:disabled="${page.number == 0}">上一页</button>
+                <button type="button" th:each="count:${#numbers.sequence(1, page.totalPages)}" th:value="${count}" th:text="${count}"
+                        th:classappend="${'btn btn-outline-secondary btn-sm btn-page ' + (count eq (page.number + 1) ? '_active' : '')}"
+                        th:if="${(count - page.number) < 6}">1</button>
+                <button type="button" value="next_page" class="btn btn-outline-secondary btn-sm" th:disabled="${(page.number + 1) == totalPages}">下一页</button>
+                <button type="button" value="end" class="btn btn-outline-secondary btn-sm" th:disabled="${(page.number + 1) == totalPages}">尾页</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

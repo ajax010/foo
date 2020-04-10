@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/layout_css :: common_header(~{::title},~{::link})">
+    <meta charset="UTF-8">
+    <title>管理平台</title>
+</head>
+<body>
+    <aside th:replace="common/menu :: menu"></aside>
+    <!-- Right Panel -->
+    <div id="right-panel" class="right-panel">
+        <div th:replace="common/header :: header"></div>
+        <div class="breadcrumbs">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>首页</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8"></div>
+        </div>
+        <div class="content mt-3">
+        </div> <!-- .content -->
+    </div><!-- /#right-panel -->
+<!-- Right Panel -->
+    <!--使用公有js-->
+    <div th:replace="common/layout_js::common_js(~{::script})">
+        <script></script>
+    </div>
+</body>
+</html>

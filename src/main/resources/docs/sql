@@ -1,0 +1,16 @@
+-- 用户
+insert into foo_user(create_date, modify_date, nickname, `password`, state, salt, username)
+value(now(), now(), '系统管理员', '0fadcd0f406b52abe8a1f686a5c2c67e', 0,  '577be5da2fc09ada975545c07296a790', 'admin');
+
+-- 角色
+insert into foo_role(create_date, modify_date, state, name) values(NOW(), NOW(), 0, '超级管理员');
+
+-- 用户角色关联
+insert into foo_user_role(user_id, role_id) values(1, 1)
+
+-- 权限
+insert into foo_permission(create_date, modify_date, state, `name`, code)
+values(now(), now(), 0, '用户管理:列表', 'user:list'),
+(now(), now(), 0, '用户管理:新增', 'user:add'),
+(now(), now(), 0, '用户管理:编辑', 'user:edit'),
+(now(), now(), 0, '用户管理:删除', 'user:del');
