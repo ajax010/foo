@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
     <body>
         <aside id="left-panel" class="left-panel" th:fragment="menu" th:menuId="${session.menuId}">
             <nav class="navbar navbar-expand-sm navbar-default">
@@ -13,16 +13,15 @@
                 <div id="main-menu" class="main-menu collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="active">
-                            <a href="/home/index"> <i class="menu-icon fa fa-dashboard"></i>首页 </a>
+                            <a href="/home/index"> <i class="menu-icon fa fa-dashboard"></i>控制台 </a>
                         </li>
-                        <h3 class="menu-title">系统管理</h3><!-- /.menu-title -->
-                        <li class="menu-item-has-children dropdown">
+                        <li class="menu-item-has-children dropdown" shiro:hasAnyPermissions="user:list, role:list">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>账户用户</a>
                             <ul class="sub-menu children dropdown-menu">
-                                <li id="userList">
+                                <li id="userList" shiro:hasPermission="user:list">
                                     <a href="/user/list" th:href="@{/user/list?menuId=userList}"><i class="fa fa-fighter-jet"></i> 用户管理</a>
                                 </li>
-                                <li id="roleList">
+                                <li id="roleList" shiro:hasPermission="role:list">
                                     <a href="/role/list" th:href="@{/role/list?menuId=roleList}"><i class="fa fa-fighter-jet"></i> 角色管理</a>
                                 </li>
                             </ul>

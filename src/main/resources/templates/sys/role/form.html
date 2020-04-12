@@ -37,6 +37,7 @@
                 </div>
                 <form id="inputForm" th:action="@{/role/save}" method="post" enctype="multipart/form-data" class="form-horizontal">
                     <input id="id" name="id" type="hidden" th:value="${entity.id}"/>
+                    <input id="permissionIds" name="permissionIds" type="hidden"/>
                     <div class="card-body card-block">
                         <div class="row form-group">
                             <div class="col col-md-2"><label for="name" class=" form-control-label">名称</label><span th:if="${entity.id} eq null" class="required">*</span></div>
@@ -48,11 +49,48 @@
                     </div>
                     <div class="card-body card-block">
                         <div class="row form-group">
+                            <div class="col col-md-2"><label for="remark" class=" form-control-label">描述</label><span class="required">*</span></div>
+                            <div class="col-12 col-md-10">
+                                <textarea id="remark" rows="9" name="remark" placeholder="描述..." class="form-control" th:text="${entity.remark}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body card-block">
+                        <div class="row form-group">
                             <div class="col col-md-2">
                                 <label for="name" class=" form-control-label">权限组</label><span class="required">*</span>
                             </div>
                             <div class="col-12 col-md-10">
-                                <span th:each="e : ${permissions}" th:text="${e.name}"/>
+                                <div class="row" th:each="e : ${permissionGroup}">
+                                    <div class="card" style="width: 95%;">
+                                        <div class="card-header">
+                                            <span th:text="${e.key}"/>
+                                        </div>
+                                        <div class="card-body ">
+                                            <table class="table _group_item" th:each="p : ${e.value}">
+                                                <thead>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td th:colspan="${p.permissions.size()*2-1}">
+                                                            <input type="checkbox" class="_group form-check-input" th:value="${p.code + p.id}" th:text="${p.name} + 【菜单】"/>
+                                                        </td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td th:each="i : ${p.permissions}">
+                                                            <input type="checkbox" th:id="${i.code + i.id}" name="permissionsId" th:value="${i.id}"
+                                                                   th:classappend="${'form-check-input _p_item ' + p.code + p.id + '_item'}"
+                                                                   th:checked="${#lists.contains(entity.permissions, i)}"
+                                                                   th:text="${i.name} + 【功能】"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -72,10 +110,28 @@
 <!-- Right Panel -->
 <!--使用公有js-->
 <div th:replace="common/layout_js::common_js(~{::script})">
-    <script th:src="@{/extends/js/validate/user-form.js}"></script>
+    <script th:src="@{/extends/js/validate/role-form.js}"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
             FormValidation.init();
+        })
+
+        $(function(){
+            $('._group').click(function(i){
+                let _class_name = $(this).val() + '_item';
+                $('.' + _class_name).prop('checked', $(this).prop('checked'));
+            });
+
+            $('._p_item').click(function(){
+                let t = $(this).parents('table');
+                t.find('._group').prop('checked', t.find('._p_item').length == t.find('._p_item:checked').length);
+            })
+
+            $('._group_item').each(function(){
+                if($(this).find('._p_item').length == $(this).find('._p_item:checked').length){
+                    $(this).find('._group').prop('checked', true);
+                }
+            });
         })
     </script>
 </div>

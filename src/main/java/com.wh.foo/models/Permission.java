@@ -1,11 +1,9 @@
 package com.wh.foo.models;
 
 import com.google.common.collect.Lists;
+import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -23,6 +21,12 @@ public class Permission extends BaseEntity{
     private String name;
     /** 代码 */
     private String code;
+    /** 所属栏目名称 */
+    private String groupName;
+    /** 所属权限组 */
+    private Permission parent;
+    /** 权限组下权限 */
+    private List<Permission> permissions = Lists.newArrayList();
     /** 对应角色 */
     private List<Role> roles = Lists.newArrayList();
 
@@ -57,5 +61,35 @@ public class Permission extends BaseEntity{
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    public Permission getParent() {
+        return parent;
+    }
+
+    public void setParent(Permission parent) {
+        this.parent = parent;
+    }
+
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @Where(clause="state=0")
+    @OrderBy("id ASC")
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 }

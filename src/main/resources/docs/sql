@@ -9,8 +9,14 @@ insert into foo_role(create_date, modify_date, state, name) values(NOW(), NOW(),
 insert into foo_user_role(user_id, role_id) values(1, 1)
 
 -- 权限
-insert into foo_permission(create_date, modify_date, state, `name`, code)
-values(now(), now(), 0, '用户管理:列表', 'user:list'),
-(now(), now(), 0, '用户管理:新增', 'user:add'),
-(now(), now(), 0, '用户管理:编辑', 'user:edit'),
-(now(), now(), 0, '用户管理:删除', 'user:del');
+insert into foo_permission(id, create_date, modify_date, state, `name`, code, parent_id, group_name)
+values(1, now(), now(), 0, '用户管理', 'user', null, '账户用户'),
+(10, now(), now(), 0, '列表', 'user:list', 1, null),
+(11, now(), now(), 0, '新增', 'user:add', 1, null),
+(12, now(), now(), 0, '编辑', 'user:edit', 1, null),
+(13, now(), now(), 0, '删除', 'user:del', 1, null),
+(2, now(), now(), 0, '角色管理', 'role', null, '账户用户'),
+(20, now(), now(), 0, '列表', 'role:list', 2, null),
+(21, now(), now(), 0, '新增', 'role:add', 2, null),
+(22, now(), now(), 0, '编辑', 'role:edit', 2, null),
+(23, now(), now(), 0, '删除', 'role:del', 2, null);

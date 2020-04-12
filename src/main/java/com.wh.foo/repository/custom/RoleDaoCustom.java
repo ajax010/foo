@@ -7,4 +7,23 @@ package com.wh.foo.repository.custom;
  */
 public interface RoleDaoCustom{
 
+    /**
+     * 保存角色权限关联信息
+     *
+     * @Param [roleId, permissionIds]
+     * @Author WangHong
+     * @Date 8:11 2020/4/12
+     * @return void
+     **/
+    void batchSave(final Long roleId, String[] permissionIds);
+
+    /**
+     * 移除角色相关权限信息
+     *
+     * @Param [roleId]
+     * @Author WangHong
+     * @Date 8:08 2020/4/12
+     * @return void
+     **/
+    void removePermissions(final Long roleId);
 }

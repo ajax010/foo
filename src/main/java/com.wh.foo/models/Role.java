@@ -54,7 +54,7 @@ public class Role extends BaseEntity{
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "foo_role_permissions",
             joinColumns = {@JoinColumn(name="role_id",referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name="permissions_id",referencedColumnName="id")})
+            inverseJoinColumns = {@JoinColumn(name="permission_id",referencedColumnName="id")})
     @Where(clause = "state=0")
     public List<Permission> getPermissions() {
         return permissions;

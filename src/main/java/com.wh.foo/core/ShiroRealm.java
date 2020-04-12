@@ -4,6 +4,7 @@ import com.wh.foo.models.Permission;
 import com.wh.foo.models.Role;
 import com.wh.foo.models.User;
 import com.wh.foo.services.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -31,15 +32,17 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        Principal principal = (Principal) principals.fromRealm(getName()).iterator().next();
+        if(null == principal){
+            return null;
+        }
+
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        String username = (String) principals.getPrimaryPrincipal();
-
-        User user = userService.findUserByName(username);
-
+        User user = userService.findByStateAndId(0, principal.getId());
         for (Role role : user.getRoles()) {
             authorizationInfo.addRole(role.getName());
             for (Permission permission : role.getPermissions()) {
-                authorizationInfo.addStringPermission(permission.getName());
+                authorizationInfo.addStringPermission(permission.getCode());
             }
         }
         return authorizationInfo;
@@ -56,6 +59,11 @@ public class ShiroRealm extends AuthorizingRealm {
         Principal principal = new Principal(user.getId(), user.getUsername(), user.getNickname(), new Date());
         return new SimpleAuthenticationInfo(principal, user.getPassword(),
                 ByteSource.Util.bytes(user.getCredentialsSalt()), getName());
+    }
+
+
+    public void clearAuthz(){
+        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 
     public class Principal{

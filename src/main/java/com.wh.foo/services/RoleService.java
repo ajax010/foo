@@ -1,24 +1,22 @@
 package com.wh.foo.services;
 
 import com.google.common.collect.Lists;
+import com.wh.foo.core.ShiroRealm;
 import com.wh.foo.models.Permission;
 import com.wh.foo.models.Role;
 import com.wh.foo.repository.PermissionDao;
 import com.wh.foo.repository.RoleDao;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description: 角色Service
@@ -32,6 +30,31 @@ public class RoleService {
     private RoleDao roleDao;
     @Resource
     private PermissionDao permissionDao;
+
+    /**
+     * 保存角色信息 并更新其相关权限
+     *
+     * @Param [entity, permissionIds]
+     * @Author WangHong
+     * @Date 8:10 2020/4/12
+     * @return void
+     **/
+    public void save(Role entity, final String permissionIds){
+        entity = roleDao.save(entity);
+        if(StringUtils.isNotBlank(permissionIds)){
+            roleDao.removePermissions(entity.getId());
+            String[] ids = permissionIds.split(",");
+            roleDao.batchSave(entity.getId(), ids);
+            clearCacheAuth();
+        }
+    }
+
+    private void clearCacheAuth() {
+        RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
+        ShiroRealm realm = (ShiroRealm) rsm.getRealms().iterator().next();
+        realm.clearAuthz();
+    }
+
 
     /**
      * 分页查询角色信息
@@ -62,7 +85,7 @@ public class RoleService {
     }
 
     /**
-     * 查询全部未删除权限
+     * 分组查询未删除权限
      *
      * @Param []
      * @Author WangHong
@@ -70,8 +93,17 @@ public class RoleService {
      * @return java.util.List<com.wh.foo.models.Permission>
      **/
     @Transactional(rollbackFor = Exception.class, readOnly = true)
-    public List<Permission> findPermissionAll(){
-        return permissionDao.findByState(0);
+    public Map<String, Set<Permission>> getPermissionAllGroup(){
+        List<Permission> list = permissionDao.findByStateAndParentId(0, null);
+        Map<String, Set<Permission>> map = new HashMap<>(16);
+        if(null != list && !list.isEmpty()){
+            for(Permission permission : list){
+                Set<Permission> permissionSet = null == map.get(permission.getGroupName()) ? new HashSet<>(16) : map.get(permission.getGroupName());
+                permissionSet.add(permission);
+                map.put(permission.getGroupName(), permissionSet);
+            }
+        }
+        return map;
     }
 
     /**

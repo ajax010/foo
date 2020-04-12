@@ -1,5 +1,6 @@
 package com.wh.foo.controllers;
 
+import com.wh.foo.core.Message;
 import com.wh.foo.core.Servlets;
 import com.wh.foo.models.Role;
 import com.wh.foo.services.RoleService;
@@ -8,13 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -65,7 +65,37 @@ public class RoleController extends BaseController{
             role = service.findOne(id);
         }
         model.addAttribute("entity", role);
-        model.addAttribute("permissions", service.findPermissionAll());
+        model.addAttribute("permissionGroup", service.getPermissionAllGroup());
         return "sys/role/form";
+    }
+
+    /**
+     * 保存角色信息
+     *
+     * @Param [entity, permissionIds, redirectAttributes]
+     * @Author WangHong
+     * @Date 17:18 2020/4/11
+     * @return java.lang.String
+     **/
+    @PostMapping("save")
+    public String save(@Valid @ModelAttribute("entity") Role entity, String permissionIds, RedirectAttributes redirectAttributes){
+        try {
+            service.save(entity, permissionIds);
+            redirectAttributes.addFlashAttribute(Message.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute(Message.ERROR);
+        }
+        return "redirect:/role/list";
+    }
+
+    /**
+     * 请求该Controller里的任何方法时会先调用本方法,当更新页面只更新部分字段时,需要添加该方法.
+     */
+    @ModelAttribute
+    public void modelAttribute(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+        if (id != -1) {
+            model.addAttribute("entity", service.findOne(id));
+        }
     }
 }

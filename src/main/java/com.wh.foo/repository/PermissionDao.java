@@ -13,12 +13,12 @@ import java.util.List;
 public interface PermissionDao extends JpaRepository<Permission, Long> {
 
     /**
-     * 根据删除状态查询权限集合
+     * 根据删除状态查询及父ID权限集合
      *
-     * @Param [state]
+     * @Param [state， id]
      * @Author WangHong
      * @Date 16:55 2020/4/8
      * @return java.util.List<com.wh.foo.models.Permission>
      **/
-    List<Permission> findByState(final int state);
+    List<Permission> findByStateAndParentId(final int state, final Long id);
 }
