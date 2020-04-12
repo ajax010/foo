@@ -34,6 +34,19 @@ var FormValidation = function () {
                     remote: "账号已存在！"
                 },
                 nickname:   "用户昵称不能为空！"
+            },
+            submitHandler:function(form){
+                let roleIds = '';
+                $('input[name="roleId"]:checked').each(function(){
+                    roleIds += $(this).val() + ',';
+                });
+
+                if(roleIds != ''){
+                    roleIds = roleIds.substring(0, roleIds.length - 1);
+                    $('#roleIds').val(roleIds);
+                }
+
+                form.submit();
             }
         })
     };

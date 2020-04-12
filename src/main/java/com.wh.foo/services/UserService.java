@@ -1,8 +1,11 @@
 package com.wh.foo.services;
 
 import com.wh.foo.core.PasswordHelper;
+import com.wh.foo.models.Role;
 import com.wh.foo.models.User;
+import com.wh.foo.repository.RoleDao;
 import com.wh.foo.repository.UserDao;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,10 +21,25 @@ import java.util.Map;
  * @Description: 用户Service
  */
 @Service
-public class UserService {
+public class UserService extends BaseService{
 
     @Resource
     private UserDao userDao;
+    @Resource
+    private RoleDao roleDao;
+
+    /**
+     * 查询全部未删除角色
+     *
+     * @Param []
+     * @Author WangHong
+     * @Date 10:07 2020/4/12
+     * @return java.util.List<com.wh.foo.models.Role>
+     **/
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public List<Role> findRoleAll(){
+        return roleDao.findByState(0);
+    }
 
     /**
      * 根据ID变更用户的删除状态
@@ -94,11 +112,16 @@ public class UserService {
      * @return void
      **/
     @Transactional(rollbackFor = Exception.class)
-    public void save(User entity){
+    public void save(User entity, final String roleIds){
         if(null == entity.getId()){
             entity = PasswordHelper.encryptPassword(entity);
         }
-        userDao.save(entity);
+        entity = userDao.save(entity);
+        if(StringUtils.isNotBlank(roleIds)){
+            userDao.removeRole(entity.getId());
+            userDao.saveRole(entity.getId(), roleIds.split(","));
+            clearCacheAuth();
+        }
     }
 
     /**

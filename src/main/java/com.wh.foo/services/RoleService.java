@@ -7,8 +7,6 @@ import com.wh.foo.models.Role;
 import com.wh.foo.repository.PermissionDao;
 import com.wh.foo.repository.RoleDao;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.RealmSecurityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,7 @@ import java.util.*;
  * @Date: 2020/4/8 16:13
  */
 @Service
-public class RoleService {
+public class RoleService extends BaseService{
 
     @Resource
     private RoleDao roleDao;
@@ -48,13 +46,6 @@ public class RoleService {
             clearCacheAuth();
         }
     }
-
-    private void clearCacheAuth() {
-        RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-        ShiroRealm realm = (ShiroRealm) rsm.getRealms().iterator().next();
-        realm.clearAuthz();
-    }
-
 
     /**
      * 分页查询角色信息

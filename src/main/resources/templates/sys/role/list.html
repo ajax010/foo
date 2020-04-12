@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="common/layout_css :: common_header(~{::title},~{::link})">
     <meta charset="UTF-8">
     <title>管理平台</title>
@@ -34,8 +34,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="fa-hover col-lg-3 col-md-6">
-                                <a th:href="@{/role/add}" class="btn btn-outline-secondary btn-sm">
+                            <div class="fa-hover col-lg-3 col-md-6" shiro:hasPermission="role:add">
+                                <a th:href="@{/role/add}" class="btn btn-outline-secondary btn-sm" >
                                     <i class="fa fa-plus-square"></i> 新增角色</a>
                             </div>
                             <div class="col-lg-9 col-md-8">
@@ -68,7 +68,7 @@
                                         <th width="15%">角色名称</th>
                                         <th width="15%">描述</th>
                                         <th width="30%">权限</th>
-                                        <th width="35%">操作</th>
+                                        <th width="35%" shiro:hasAnyPermissions="role:edit, role:delete">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -77,9 +77,9 @@
                                         <td th:text="${e.name}">角色名称</td>
                                         <td th:text="${#strings.abbreviate(e.remark, 20)}">描述</td>
                                         <td th:text="${e.permissionNameStr}">权限</td>
-                                        <td>
-                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/role/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
-                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
+                                        <td shiro:hasAnyPermissions="role:edit, role:delete">
+                                            <div shiro:hasPermission="role:edit" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/role/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
+                                            <div shiro:hasPermission="role:delete" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
                                         </td>
                                     </tr>
                                 </tbody>

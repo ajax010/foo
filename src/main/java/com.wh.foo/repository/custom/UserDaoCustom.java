@@ -13,6 +13,26 @@ import java.util.Map;
 public interface UserDaoCustom {
 
     /**
+     * 清空用户角色
+     *
+     * @Param [userId]
+     * @Author WangHong
+     * @Date 10:30 2020/4/12
+     * @return void
+     **/
+    void removeRole(final Long userId);
+
+    /**
+     * 保存用户角色关系
+     *
+     * @Param [userId, roleIds]
+     * @Author WangHong
+     * @Date 10:27 2020/4/12
+     * @return void
+     **/
+    void saveRole(final Long userId, final String[] roleIds);
+
+    /**
      * 分页查询用户列表
      *
      * @Param [searchParams, pageRequest]

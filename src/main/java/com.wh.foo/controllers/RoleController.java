@@ -4,6 +4,7 @@ import com.wh.foo.core.Message;
 import com.wh.foo.core.Servlets;
 import com.wh.foo.models.Role;
 import com.wh.foo.services.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -40,8 +41,9 @@ public class RoleController extends BaseController{
      * @return java.lang.String
      **/
     @GetMapping("list")
+    @RequiresPermissions(value = {"role:list"})
     public String list(@RequestParam(value = "page", defaultValue = "0") int pageNumber,
-                       @RequestParam(value = "size", defaultValue = "1") int pageSize, ServletRequest request,
+                       @RequestParam(value = "size", defaultValue = "20") int pageSize, ServletRequest request,
                        Model model){
         Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
         Page<Role> page = service.findPage(searchParams, pageNumber, pageSize);
@@ -59,6 +61,7 @@ public class RoleController extends BaseController{
      * @return java.lang.String
      **/
     @GetMapping({"add", "edit/{id}"})
+    @RequiresPermissions(value = {"role:add", "role:edit"})
     public String edit(@PathVariable(value = "id", required = false) Long id, Model model){
         Role role = new Role();
         if(null != id){
@@ -78,6 +81,7 @@ public class RoleController extends BaseController{
      * @return java.lang.String
      **/
     @PostMapping("save")
+    @RequiresPermissions(value = {"role:add", "role:edit"})
     public String save(@Valid @ModelAttribute("entity") Role entity, String permissionIds, RedirectAttributes redirectAttributes){
         try {
             service.save(entity, permissionIds);

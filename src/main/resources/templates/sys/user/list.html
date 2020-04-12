@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="common/layout_css :: common_header(~{::title},~{::link})">
     <meta charset="UTF-8">
     <title>管理平台</title>
@@ -34,7 +34,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="fa-hover col-lg-3 col-md-4">
+                            <div class="fa-hover col-lg-3 col-md-4" shiro:hasPermission="user:add">
                                 <a th:href="@{/user/add}" class="btn btn-outline-secondary btn-sm">
                                     <i class="fa fa-plus-square"></i> 新增用户</a>
                             </div>
@@ -74,7 +74,7 @@
                                         <th width="5%">#</th>
                                         <th width="25%">账号</th>
                                         <th width="25%">昵称</th>
-                                        <th width="45%">操作</th>
+                                        <th width="45%" shiro:hasAnyPermissions="user:edit, user:delete">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,10 +82,10 @@
                                         <td th:text="${userStat.index + 1}">序号</td>
                                         <td th:text="${e.username}">账号</td>
                                         <td th:text="${e.nickname}">昵称</td>
-                                        <td>
-                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: reset_password('${e.id}');|"><i class="fa fa-refresh"></i> 重置 </a></div>
-                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/user/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
-                                            <div class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
+                                        <td shiro:hasAnyPermissions="user:edit, user:delete">
+                                            <div shiro:hasPermission="user:edit" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: reset_password('${e.id}');|"><i class="fa fa-refresh"></i> 重置 </a></div>
+                                            <div shiro:hasPermission="user:edit" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/user/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
+                                            <div shiro:hasPermission="user:delete" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
                                         </td>
                                     </tr>
                                 </tbody>

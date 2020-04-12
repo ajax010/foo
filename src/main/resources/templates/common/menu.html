@@ -15,6 +15,7 @@
                         <li class="active">
                             <a href="/home/index"> <i class="menu-icon fa fa-dashboard"></i>控制台 </a>
                         </li>
+                        <h3 class="menu-title" shiro:hasAnyPermissions="user:list, role:list">系统</h3>
                         <li class="menu-item-has-children dropdown" shiro:hasAnyPermissions="user:list, role:list">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>账户用户</a>
                             <ul class="sub-menu children dropdown-menu">

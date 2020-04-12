@@ -37,6 +37,7 @@
                 </div>
                 <form id="inputForm" th:action="@{/user/save}" method="post" enctype="multipart/form-data" class="form-horizontal">
                     <input id="id" name="id" type="hidden" th:value="${entity.id}"/>
+                    <input id="roleIds" name="roleIds" type="hidden"/>
                     <div class="card-body card-block">
                         <div class="row form-group">
                             <div class="col col-md-2"><label for="username" class=" form-control-label">账号</label><span class="required">*</span></div>
@@ -49,6 +50,12 @@
                             <div class="col col-md-2"><label for="nickname" class=" form-control-label">昵称</label><span class="required">*</span></div>
                             <div class="col-12 col-md-10">
                                 <input type="text" id="nickname" name="nickname" placeholder="昵称" class="form-control"  th:value="${entity.nickname}">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label class=" form-control-label">角色</label><span class="required">*</span></div>
+                            <div class="col-12 col-md-10">
+                                <input type="checkbox" th:each="e : ${roles}" th:checked="${#lists.contains(entity.roles, e)}" name="roleId" th:value="${e.id}" th:text="${e.name}"/>
                             </div>
                         </div>
                     </div>
