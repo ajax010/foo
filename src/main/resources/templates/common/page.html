@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8">
                 总计：<span id="totalElements" th:text="${page.totalElements}"/>&nbsp;条；
-                <span id="pageNumber" th:text="${page.number}"/>/<span id="totalPages" th:text="${page.totalPages}"/>页。
+                <span id="pageNumber" th:text="${page.number == 0 ? 1 : page.number}"/>/<span id="totalPages" th:text="${page.totalPages}"/>页。
                 <input id="pageSize" th:value="${page.size}" type="hidden"/>
             </div>
             <div class="col-md-4" th:page_size="${page.size}" th:page_number="${page.number}">
