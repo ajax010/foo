@@ -85,7 +85,7 @@
                                         <td shiro:hasAnyPermissions="user:edit, user:delete">
                                             <div shiro:hasPermission="user:edit" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: reset_password('${e.id}');|"><i class="fa fa-refresh"></i> 重置 </a></div>
                                             <div shiro:hasPermission="user:edit" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="@{'/user/edit/'+${e.id}}"><i class="fa fa-edit"></i> 编辑 </a></div>
-                                            <div shiro:hasPermission="user:delete" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
+                                            <div shiro:hasPermission="user:del" class="fa-hover col-lg-3 col-md-6"><a href="#" th:href="|javascript: del('${e.id}');|"><i class="fa fa-trash-o"></i> 删除 </a></div>
                                         </td>
                                     </tr>
                                 </tbody>
