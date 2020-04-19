@@ -1,22 +1,50 @@
+--创建名称为“foo”数据库，并设定编码集为utf8
+CREATE DATABASE IF NOT EXISTS foo DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
+--创建了一个名为：txt 密码为：txt123 的用户
+ create user 'txt'@'localhost' identified by 'txt123';
+
+-- 修改Host为%
+ update user set host='%' where user='txt';
+
+ --授予用户 txt 通过外网IP对数据库“foo”的全部权限
+ grant all privileges on 'foo'.* to 'txt'@'%';
+
+ --刷新权限
+ flush privileges;
+
+ --修改加密方式
+ alter user txt identified with mysql_native_password by 'txt123';
+
+ --授予用户“txt”通过外网IP对于该数据库“foo”中表的创建、修改、删除权限,以及表数据的增删查改权限
+ GRANT SELECT,ALTER,UPDATE,INSERT,DELETE,CREATE,DROP ON foo.* to 'txt'@'%';
+
+ --刷新权限
+ flush privileges;
+
 -- 用户
-insert into foo_user(create_date, modify_date, nickname, `password`, state, salt, username)
-value(now(), now(), '系统管理员', '0fadcd0f406b52abe8a1f686a5c2c67e', 0,  '577be5da2fc09ada975545c07296a790', 'admin');
+insert into foo_user(id, create_date, modify_date, nickname, `password`, state, salt, username)
+value(1, now(), now(), '系统管理员', '0fadcd0f406b52abe8a1f686a5c2c67e', 0,  '577be5da2fc09ada975545c07296a790', 'admin');
 
 -- 角色
-insert into foo_role(create_date, modify_date, state, name) values(NOW(), NOW(), 0, '超级管理员');
+insert into foo_role(id, create_date, modify_date, state, name) values(1, NOW(), NOW(), 0, '超级管理员');
 
 -- 用户角色关联
-insert into foo_user_role(user_id, role_id) values(1, 1)
+insert into foo_user_role(user_id, role_id) values(1, 1);
 
 -- 权限
 insert into foo_permission(id, create_date, modify_date, state, `name`, code, parent_id, group_name)
 values(1, now(), now(), 0, '用户管理', 'user', null, '账户用户'),
-(10, now(), now(), 0, '列表', 'user:list', 1, null),
-(11, now(), now(), 0, '新增', 'user:add', 1, null),
-(12, now(), now(), 0, '编辑', 'user:edit', 1, null),
-(13, now(), now(), 0, '删除', 'user:del', 1, null),
+(100, now(), now(), 0, '列表', 'user:list', 1, null),
+(101, now(), now(), 0, '新增', 'user:add', 1, null),
+(102, now(), now(), 0, '编辑', 'user:edit', 1, null),
+(103, now(), now(), 0, '删除', 'user:del', 1, null),
 (2, now(), now(), 0, '角色管理', 'role', null, '账户用户'),
-(20, now(), now(), 0, '列表', 'role:list', 2, null),
-(21, now(), now(), 0, '新增', 'role:add', 2, null),
-(22, now(), now(), 0, '编辑', 'role:edit', 2, null),
-(23, now(), now(), 0, '删除', 'role:del', 2, null);
+(200, now(), now(), 0, '列表', 'role:list', 2, null),
+(201, now(), now(), 0, '新增', 'role:add', 2, null),
+(202, now(), now(), 0, '编辑', 'role:edit', 2, null),
+(203, now(), now(), 0, '删除', 'role:del', 2, null);
+
+-- 角色权限关联
+insert into foo_role_permissions(role_id, permission_id)
+values(1, 1),(1, 100),(1, 101),(1, 102),(1, 103),(1, 2),(1, 200),(1, 201),(1, 202),(1, 203);
